@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>Insert title here</title>
+</head>
+<body>
+<form action="http://localhost:9001/uploadDataExcelFile" method="POST" enctype="multipart/form-data">
+    <p>上传数据总表：</p><br/>
+    <input type="file" name="file2"/>
+    <input type="submit" value = "上传"/>
+</form>
+<form action="http://localhost:9001/uploadZipFile" method="POST" enctype="multipart/form-data">
+    <p>zip上传：</p><br/>
+    <input type="file" name="file3"/>
+    <input type="submit" value = "上传"/>
+</form>
+<form action="http://localhost:9001/uploadBatchFiles" method="POST" enctype="multipart/form-data">
+    <p>多文件上传：</p><br/>
+    <input type="file" name="file"/>
+    <input type="submit" value = "上传"/>
+</form>
+<a href="http://localhost:9001/download">下载1</a>
+<!-- <a href="http://localhost:8080/testDownload">下载2</a> -->
+<a href="http://localhost:9001/downloadexcel">excel下载</a>
+<a href="http://localhost:9001/downloadFile">下载文件</a>
+<a href="http://localhost:9001/deleteFile">删除文件</a>
+<form action="http://localhost:9001/addUser" method="POST" enctype="multipart/form-data">
+    <p>添加用户：</p>
+    <p>ID：<input type="text" name="userId"/></p>
+    <p>用户名：<input type="text" name="name"/></p>
+    <p>密码：<input type="password" name="password"/></p>
+    <p>电话：<input type="text" name="tel"/></p>
+    <input type="submit" value = "add"/>
+</form>
+
+<a href="findUserList">查看所有用户</a>
+<form action="http://localhost:8080/getOne" method="GET" enctype="multipart/form-data">
+    <p>查询：</p>
+    <p>ID：<input type="text" name="userId"/></p>
+    <input type="submit" value = "search"/>
+</form>
+<a href="http://localhost:9001/selectOrg">查看机构</a>
+<!-- <script src="js/jquery-2.1.0.js">
+</script>
+<script type="text/javascript">
+$(function(){
+	$("#btn").click(function(){
+		$.ajax({
+			url: 'http://localhost:9001/selectOrg',
+			type: "POST", //POST
+			data: '',
+			async: async,
+			cache: false,
+			success: function(res){
+				console.log(res);
+			},
+			error: function(res){
+				alert('请求失败，请稍后再试');
+			},
+			dataType:"json"
+		});
+	});
+});
+</script> -->
+</body>
+</html>

@@ -1,0 +1,165 @@
+ <!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>新增组织页</title>
+		<link rel="stylesheet" href="/css/reset.css" />
+		<link rel="stylesheet" href="/css/common.css" />
+		<link rel="stylesheet" href="/css/jquery.dataTables.min.css" />
+		<link rel="stylesheet" href="/css/dataStyle.css" />
+		<style>
+			.form-group {width: 560px;margin: 0 auto;text-align: left;}
+			.form-group label{width: 140px;}
+			.form-group .tit,.form-group .add-con{float: left;font: 16px '微软雅黑';margin-left: 15px;}
+			.form-group .tit{margin: -2px 0 0 -2px;margin-bottom: 20px;}
+			.form-group span{float: left;font-size: 14px;color: #b5b5b5;}
+			.form-group .add-con li{display: inline-block;margin-right: 5px;cursor: pointer;}
+			.form-group .add-con li label,.form-group .add-con li input{width: auto;height: auto;display: inline-block;font: 16px '微软雅黑';margin: 0;cursor: pointer;vertical-align: top;}
+			.form-group .add-con li input{width: 18px;height: 18px;}
+			.form-group .add-con li label{margin-top: -3px;margin-left: 5px}
+			input.addAMInput{width: 230px}
+			#addSybAMUl li,#addDqAMUl li{overflow: hidden;float: left;width: 110px;}
+			#addSybAMUl li a.add-close,#addDqAMUl li a.add-close{
+			    float: right;
+			    width: 10px;
+			    height: 10px;
+			    margin-top: 6px;
+			    margin-left: 10px;
+			    background: url(../images/ico.png) -180px -30px no-repeat;
+			}
+			.btn_orange{display: inline-block;width: 40px;margin-left: 20px}
+			.sybUl,.dqUl{margin-bottom: 20px;}
+			.sybUl span,.sybUl ul li span,.dqUl span,.dqUl ul li span{font: 14px '微软雅黑';color: #2f2f2f;margin-left: 16px;}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div id="nav" class="sidebar"> </div>
+			<div class="content">
+				<h2>新增组织区<i></i></h2>
+				<div class="form-group">
+					<label class="tit">组织类型  </label>
+					<ul class="add-con">
+						<li><input type="radio" id="sybRadio" name="addType" value="0" onClick="dptTypeRadio(this)" /><label for="sybRadio">事业部</label></li>
+						<li><input type="radio" id="dqRadio"  name="addType" value="1" onClick="dptTypeRadio(this)" checked/><label for="dqRadio">大区</label></li>
+						<li><input type="radio" id="fgsRadio"  name="addType" value="2" onClick="dptTypeRadio(this)"/><label for="fgsRadio">分公司</label></li>
+						<li><input type="radio" id="yybRadio"  name="addType" value="3" onClick="dptTypeRadio(this)"/><label for="yybRadio">营业部</label></li>
+					</ul>
+				</div>
+				<div class="form-group">
+					<label for="dptID">组织ID</label>
+					<input type="text" id="dptID" placeholder="请输入组织ID" required/>
+				</div>
+				<div class="form-group">
+					<label for="dptName">组织名称</label>
+					<input type="text" id="dptName" placeholder="请输入组织名称" required/>
+				</div>
+				<div class="form-group">
+					<label for="sid">所属事业部</label>
+					<select id="sid">
+						<option value="">请选择</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="dqManager">经理</label>
+			        <input type="text" id="dqManager" value=""  name="dqManager" placeholder="请输入大区经理" required />
+				</div>
+				<div class="form-group">
+					<label for="addDqAMInput">副经理</label>
+					<input type="text" id="addDqAMInput" class="addAMInput" placeholder="请输入大区副经理" maxlength="5">
+					<a href="javascript:;" class="btn btn_orange" onClick="addDqAM()">添加</a>
+					<!-- <select id="dqAssistantManager">
+						<option value="">请选择</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</select> -->
+					<div class="form-group dqUl">
+					<span>已添加副经理 </span>
+					<ul id="addDqAMUl">
+						
+					</ul>
+				</div>
+				</div>
+				<a href="javascript:;" id="editBtn" class="btn btn-box fl" onclick="saveOrganizationDq()">确定</a>
+			</div>
+		</div>
+		<script src="/js/jquery-2.1.0.js"></script>
+		<script src="/js/ajax.js"></script>
+		<script src="/js/common.js"></script>
+		<script>
+			function addDqAM(){//添加副经理dq
+				var addDqAMInput = $("#addDqAMInput").val();
+		        var msg = "<li><span>" + addDqAMInput + "</span><a href='javascript:;' onclick='bindListener(this)' class='add-close'></a></li>";
+		        $("#addDqAMUl").append(msg);
+		    	$("#addDqAMInput").val("");
+			}
+			function bindListener(obj){//删除
+				var thisLi = obj.parentNode;
+				thisLi.parentNode.removeChild(thisLi); //删除子级removeChild
+			}
+			querySelect(); //事业部
+			function querySelect(){ //查事业部	
+				var success = function(data){
+					frameWorkList = data;	
+					createSelect();
+				};
+				var faild = function(error){
+			 		alert(error);
+			 	};
+			 	var user = JSON.parse(sessionStorage.user);
+			 	ajaxPost('/selectOrganizationByCondition',{'typeId':user.typeId,'sid':user.sid,'did':user.did,'fid':user.fid,'yid':user.yid},false,success,faild);
+			}
+			function createSelect(){ //创建sid
+				var sid = '<option value="">请选择</option>';
+				var dmanager = '';
+				for(var i=0;i<frameWorkList.length;i++){
+					sid += '<option value="'+frameWorkList[i].did+'">'+ frameWorkList[i].dname +'[' + frameWorkList[i].did +']</option>';
+				}
+				document.getElementById('sid').innerHTML = sid;
+			}
+			
+			function saveOrganizationDq(){
+				var addType = $("input[name='addType']:checked").val(); //类型
+				var dptID = document.getElementById("dptID").value //ID
+				var dptName = document.getElementById("dptName").value;  //名称
+				var sid = document.getElementById("sid").value;  //所属事业部
+				var dqManager = document.getElementById("dqManager").value;  //所属经理
+				var addDqAMInput = document.getElementById("addDqAMInput").value;  //所属副经理
+				if(dptID.substr(0, 1) == ' '){
+					alert("组织ID不能输入空格！");
+					return false;
+				}else if(dptID == ''){
+					alert("组织ID不能为空");
+					return false;
+				}
+				if(dptName.substr(0, 1) == ' '){
+					alert("组织名称不能输入空格！");
+					return false;
+				}else if(dptName == ''){
+					alert("组织名称不能为空");
+					return false;
+				}
+				var addDqAMUlSpan = document.getElementById('addDqAMUl').getElementsByTagName("span");
+				var addDqAMAll = "";
+				for(var i = 0 ; i<addDqAMUlSpan.length;i++){
+					addDqAMAll += addDqAMUlSpan[i].innerHTML + ",";//去掉最后一个字符，
+				}
+				addDqAMAll = addDqAMAll.substr(0, addDqAMAll.length - 1);//副经理传值
+				var success = function(data){
+					alert('提交成功！');
+				};
+				var faild = function(error){
+					alert(error);
+				};
+				 //user = JSON.parse(sessionStorage.user);
+				ajaxDownExcel('/insertOrganization',{'levelType':addType,'oid':dptID,'oname':dptName,'did':sid,'mname':dqManager,'assistname':addDqAMAll},success,faild);
+			}
+		</script>
+	</body>
+</html>

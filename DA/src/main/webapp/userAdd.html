@@ -1,0 +1,131 @@
+ <!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>用户编辑区</title>
+		<link rel="stylesheet" href="/css/reset.css" />
+		<link rel="stylesheet" href="/css/common.css" />
+		<link rel="stylesheet" href="/css/jquery.dataTables.min.css" />
+		<link rel="stylesheet" href="/css/dataStyle.css" />
+	</head>
+	<body>
+		<div class="container">
+			<div id="nav" class="sidebar"> </div>
+			<div class="content">
+				<h2>用户编辑区<i></i></h2>
+				<form action="">
+					<div class="form-group">
+						<label for="userId">员工编号</label>
+			            <input type="text" id="userId" name="userId" value="" maxlength="10" placeholder="请输入用户编号" onkeyup="value=value.replace(/[^\d]/g,'')" onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))" required/>
+			            <label for="typeName">权限类型</label>
+			        	<select id="typeName" required>
+			            	<option value="">请选择权限类型</option>
+			            	<option value="1">数据专员</option>
+			            	<option value="2">预算、市场专员</option>
+			            	<option value="3">理财经理</option>
+			            	<option value="4">团队经理</option>
+			            	<option value="5">营业部经理</option>
+			            	<option value="6">分公司经理</option>
+			            	<option value="7">大区经理</option>
+			            	<option value="8">事业部经理</option>
+			            	<option value="9">机构管理人员</option>
+			            	<option value="system">超级管理员</option>
+			            </select>
+			            
+			        </div>
+					<input type="hidden" id="sybManager" />
+					<input type="hidden" id="dqManager"/>
+					<input type="hidden" id="fgsManager"/>
+					<input type="hidden" id="yybManager"/>
+			        <div class="form-group" >
+			        	<label for="sid">事业部</label>
+			            <!-- <select id="sid" required><option value=''>请选择</option></select> -->
+			            <input type="text" id="sid" name="sid" value="" placeholder="请输入事业部"  required/>
+			            <label for="did">大区</label>
+			            <!-- <select id="did" required><option value=''>请选择</option></select> -->
+			            <input type="text" id="did" name="did" value="" placeholder="请输入大区"  required/>
+			        </div>
+			        <div class="form-group" >
+			        	<label for="fid">分公司</label>
+			            <!-- <select id="fid"required><option value=''>请选择</option></select> -->
+			            <input type="text" id="fid" name="fid" value="" placeholder="请输入分公司"  required/>
+			            <label for="yid">营业部</label>
+			            <!-- <select id="yid" required><option value=''>请选择</option></select> -->
+			            <input type="text" id="yid" name="yid" value="" placeholder="请输入营业部"  required/>
+			        </div>
+			        <div class="form-group">
+			        	<label for="tManager">团队</label>
+			        	<!-- <select id="tManager" required><option value=''>请选择</option></select> -->
+			            <input type="text" id="tManager" name="tManager" value="" placeholder="请输入团队"  required/>
+			        	<label class="visibilityHidden"></label>
+			            <input type="text" required  class="visibilityHidden"/>
+			        </div>
+			        <div id="passBox" class="form-group">
+			       		<label for="name">用户名</label>
+			            <input type="text" id="name" name="name" value="" maxlength="10" placeholder="请输入用户名" required/>
+			        	<label for="password">密码</label>
+			            <input type="text" id="password" name="password" maxlength="20" placeholder="请输入密码" required/>
+			            
+			        </div>
+					<div class="form-group" >
+						<label for="idCard">身份证号</label>
+			            <input type="text" id="idCard" name="idCard" value="" maxlength="18" placeholder="请输入身份证号" required/>
+			            <label for="tel">电 &nbsp; &nbsp; &nbsp;话</label>
+			            <input type="text" id="tel" name="tel" value="" maxlength="13" placeholder="请输入电话" required/>
+			        </div>
+			       <!--  <a href="javascript:;" id="editBtn" class="btn btn-box fl" style="display: none;" onclick="saveData()">保存</a> -->
+					<a href="javascript:;" id="addBtn" class="btn btn-box btnBgCFF6666 fl" onclick="addData()">新增</a>
+			    </form>
+			</div>
+		</div>
+		<script src="/js/jquery-2.1.0.js"></script>
+		<script src="/js/ajax.js"></script>
+		<script src="/js/common.js"></script>
+		<!-- <script src="/js/query.select.js"></script> -->
+		<script>
+			function addData(){ //新增
+				var userId = document.getElementById("userId").value; 
+				if(userId == ''){alert('用户编号不能为空,请填写正确用户编号!');return false;}
+				var sid = document.getElementById('sid').value; 
+				var did = document.getElementById('did').value;
+				var fid = document.getElementById('fid').value;
+				var yid = document.getElementById('yid').value;
+				var tid = document.getElementById('tManager').value;
+				/*if(yid == '' || yid == '0'){alert('营业部编号不能为空,请填写正确营业部编号!');return false;}
+				if(fid == '' || fid == '0'){alert('分公司编号不能为空,请填写正确分公司编号!');return false;}
+				if(sid == '' || sid == '0'){alert('事业部编号不能为空,请填写正确事业部编号!');return false;}
+				if(did == '' || did == '0'){alert('大区编号不能为空,请填写正确大区编号!');return false;}
+				var tid = document.getElementById('tid').value;
+				if(tid == ''){alert('团队编号不能为空,请填写正确团队编号!');return false;} */
+				var name = document.getElementById("name").value;
+				if(name == ''){alert('用户名不能为空,请填写正确用户名!');return false;}
+				var password = document.getElementById("password").value;
+				if(password == ''){alert('密码不能为空,请填写正确密码!');return false;}
+				var typeName = document.getElementById("typeName").value;
+				if(typeName == '' || typeName == '0'){alert('请选择正确权限类型!');return false;}
+				var idCard = document.getElementById('idCard').value;	
+				if(idCard == '' || !idCardReg.test(idCard)){alert('身份证号不能为空,请填写正确身份证号!');return false;}
+				var tel = document.getElementById('tel').value; 
+				if(tel == "" || !phoneReg.test(tel)){alert("请输入正确电话");return false;}
+				var success = function(data){
+					if(data.code == 1){
+						alert('提交成功！');
+						window.location.href = "userList.html";
+					}else{
+						alert('请重新输入正确代码！');
+					}
+				};
+				var faild = function(error){
+					alert(error);
+				};
+				var user = JSON.parse(sessionStorage.user);
+				//"sid":sid,"did":did,"fid":fid,"yid":yid,"tid":tid,
+				ajaxPost('/insertUserSelective',{"localUserId":user.localUserId,"userId":userId,"sname":sid,"dname":did,"fname":fid,"yname":yid,"tname":tid,
+												 "name":name,"password":password,"typeId":typeName,"tel":tel,"idCard":idCard},true,success,faild);
+			}
+		</script>
+	</body>
+</html>
