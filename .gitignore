@@ -25,3 +25,5 @@ target/
 .DS_Store
 .idea/
 .mvn/
+.settings/
+logs/
